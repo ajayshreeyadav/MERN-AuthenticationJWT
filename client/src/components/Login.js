@@ -49,7 +49,7 @@ const Login = () => {
               <span className="text-gray-500 text-sm">
                 Not a member yet ?
                 <Link className="text-red-500" to="/register">
-                  Register Now
+                  &nbsp;Register Now
                 </Link>
               </span>
             </div>
