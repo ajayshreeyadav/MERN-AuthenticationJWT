@@ -1,8 +1,16 @@
 import toast from 'react-hot-toast';
+import { authenticate } from './helper';
 
 // Validate login page username
 export async function usernameValidate(values) {
   const errors = usernameVerify({}, values);
+  if (values.username) {
+    // Check User exist or not
+    const { status } = await authenticate(values.username);
+    if (status !== 200) {
+      errors.exist = toast.error('User does not exist..!');
+    }
+  }
   return errors;
 }
 
@@ -23,12 +31,18 @@ export async function resetPasswordValidation(values) {
   return errors;
 }
 
-// Validate register form
+// Validate register page
 export async function registerValidation(values) {
   const errors = usernameVerify({}, values);
   passwordVerify(errors, values);
   emailVerify(errors, values);
 
+  return errors;
+}
+
+// Validate profile page
+export async function profileValidation(values) {
+  const errors = emailVerify({}, values);
   return errors;
 }
 
