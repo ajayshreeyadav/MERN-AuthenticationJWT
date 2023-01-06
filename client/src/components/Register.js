@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import avatar from '../assets/profile.png';
 import styles from '../styles/username.module.css';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useFormik } from 'formik';
 import { registerValidation } from '../helper/validate';
 import convertToBase64 from '../helper/convert';
+import { registerUser } from '../helper/helper';
 
 const Register = () => {
   const [file, setFile] = useState();
-
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -21,7 +22,15 @@ const Register = () => {
     validateOnChange: false,
     onSubmit: async values => {
       values = await Object.assign(values, { profile: file || '' });
-      console.log(values);
+      let registerPromise = registerUser(values);
+      toast.promise(registerPromise, {
+        loading: 'Creating...',
+        success: <b>Successfully Registered..!</b>,
+        error: <b>Could not Register..!</b>,
+      });
+      registerPromise.then(function () {
+        navigate('/');
+      });
     },
   });
 

@@ -10,31 +10,44 @@ import PageNotFound from './components/PageNotFound';
 import Reset from './components/Reset';
 import Recovery from './components/Recovery';
 import './index.css';
+
+// Auth Middleware
+import { AuthorizeUser, ProtectRoute } from './middleware/auth';
+
 // Root routes
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Login></Login>,
   },
+
   {
     path: '/register',
     element: <Register></Register>,
+  },
+  {
+    path: '/password',
+    element: (
+      <ProtectRoute>
+        <Password />
+      </ProtectRoute>
+    ),
+  },
+  {
+    path: '/profile',
+    element: (
+      <AuthorizeUser>
+        <Profile />
+      </AuthorizeUser>
+    ),
   },
   {
     path: '/recovery',
     element: <Recovery></Recovery>,
   },
   {
-    path: '/password',
-    element: <Password></Password>,
-  },
-  {
     path: '/reset',
     element: <Reset></Reset>,
-  },
-  {
-    path: '/profile',
-    element: <Profile></Profile>,
   },
   {
     path: '*',
